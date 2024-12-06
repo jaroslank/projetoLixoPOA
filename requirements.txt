@@ -1,0 +1,7 @@
+Flask
+supabase-py
+bcrypt
+python-dotenv
+qrcode[pil]
+Pillow
+

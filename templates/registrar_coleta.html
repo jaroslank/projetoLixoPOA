@@ -1,0 +1,229 @@
+<!-- templates/registrar_coleta.html -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Coleta</title>
+    <!-- Meta Tags para Responsividade -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .btn-success {
+            background-color: #17a2b8; /* Azul */
+            border-color: #17a2b8;
+        }
+        .btn-secondary {
+            background-color: #343a40; /* Cinza Escuro */
+            border-color: #343a40;
+        }
+        .form-control, .custom-select {
+            background-color: #2c2c2c;
+            color: #ffffff;
+            border: 1px solid #6f42c1;
+        }
+        .form-control:focus, .custom-select:focus {
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border-color: #28a745; /* Verde */
+            box-shadow: none;
+        }
+        /* Estilos para o Leitor de QR Code */
+        #qr-reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: none; /* Inicialmente escondido */
+        }
+        #start-qr-btn {
+            margin-bottom: 20px;
+        }
+    </style>
+    <!-- Política de Segurança de Conteúdo (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://code.jquery.com https://cdn.jsdelivr.net;
+        style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' https://via.placeholder.com https://qsrgmjucivjqtwuoyjfr.supabase.co;
+        connect-src 'self' https://qsrgmjucivjqtwuoyjfr.supabase.co;
+    ">
+    <!-- Biblioteca html5-qrcode -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Registrar Coleta</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-3">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <!-- Botão para Iniciar Escaneamento de QR Code -->
+        <button id="start-qr-btn" class="btn btn-info"><i class="fas fa-qrcode"></i> Escanear QR Code</button>
+        
+        <!-- Contêiner do Leitor de QR Code -->
+        <div id="qr-reader"></div>
+        
+        <form id="coleta-form" action="{{ url_for('registrar_coleta') }}" method="post">
+            <div class="form-group">
+                <label for="lixeira_id">Selecionar Lixeira:</label>
+                <select class="form-control" id="lixeira_id" name="lixeira_id" required>
+                    <option value="" disabled selected>-- Selecionar --</option>
+                    {% for lixeira in lixeiras %}
+                        <option value="{{ lixeira.id }}">{{ lixeira.tipos_lixo.tipo }} - {{ lixeira.localizacao }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tipo_lixo">Tipo de Lixo:</label>
+                <select class="form-control" id="tipo_lixo" name="tipo_lixo" required>
+                    <option value="" disabled selected>-- Selecionar --</option>
+                    <option value="Orgânico">Orgânico</option>
+                    <option value="Reciclável">Reciclável</option>
+                    <option value="Perigoso">Perigoso</option>
+                    <option value="Eletrônico">Eletrônico</option>
+                    <option value="Construção">Construção</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fas fa-check-circle"></i> Registrar Coleta</button>
+        </form>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Voltar ao Dashboard</a>
+    </div>
+    
+    <!-- Bootstrap JS e Dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-1CmrxMRARb6aLqgBO7+qkfRI2QZV6WHWgNlUv94OV8S70/g0CjlJ3g5Qvw1x3IZF" crossorigin="anonymous"></script>
+    
+    <!-- Script para Gerenciar o Leitor de QR Code e Redirecionamento -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const startQrBtn = document.getElementById('start-qr-btn');
+            const qrReader = document.getElementById('qr-reader');
+            const coletaForm = document.getElementById('coleta-form');
+            const lixeiraSelect = document.getElementById('lixeira_id');
+
+            let html5QrcodeScanner;
+
+            startQrBtn.addEventListener('click', function() {
+                // Toggle a exibição do leitor de QR Code
+                if (qrReader.style.display === "none" || qrReader.style.display === "") {
+                    qrReader.style.display = "block";
+                    startQrScanner();
+                } else {
+                    qrReader.style.display = "none";
+                    stopQrScanner();
+                }
+            });
+
+            function startQrScanner() {
+                // Instanciar o scanner com configurações básicas
+                html5QrcodeScanner = new Html5Qrcode("qr-reader");
+                const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                    // Supondo que o QR Code contenha apenas o lixeira_id
+                    console.log(`QR Code Scanned: ${decodedText}`);
+                    const lixeiraId = decodedText.trim();
+                    if (isValidLixeiraId(lixeiraId)) {
+                        // Selecionar a lixeira no dropdown
+                        lixeiraSelect.value = lixeiraId;
+                        // Opcional: Exibir uma notificação de sucesso
+                        alert('Lixeira selecionada via QR Code!');
+                        // Parar o scanner
+                        stopQrScanner();
+                        // Opcional: Submeter o formulário automaticamente
+                        coletaForm.submit();
+                    } else {
+                        alert('QR Code inválido ou não reconhecido.');
+                    }
+                };
+
+                const config = { fps: 10, qrbox: 250 };
+
+                // Iniciar o scanner
+                html5QrcodeScanner.start(
+                    { facingMode: "environment" }, // Preferir a câmera traseira
+                    config,
+                    qrCodeSuccessCallback
+                ).catch(err => {
+                    console.error(`Erro ao iniciar o scanner: ${err}`);
+                    alert('Não foi possível iniciar o leitor de QR Code.');
+                });
+            }
+
+            function stopQrScanner() {
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.stop().then(ignore => {
+                        html5QrcodeScanner.clear();
+                        console.log('Scanner parado e limpo.');
+                    }).catch(err => {
+                        console.error(`Erro ao parar o scanner: ${err}`);
+                    });
+                }
+            }
+
+            function isValidLixeiraId(id) {
+                // Implementar validação conforme necessário
+                // Por exemplo, verificar se o id é numérico e está presente no dropdown
+                const options = Array.from(lixeiraSelect.options).map(option => option.value);
+                return options.includes(id);
+            }
+
+            // Adicionar Listener para Submissão do Formulário
+            coletaForm.addEventListener('submit', function(event) {
+                // Opcional: Adicionar lógica adicional antes da submissão
+                // Por exemplo, validações adicionais
+                // Se tudo estiver correto, permitir a submissão
+                // Caso contrário, impedir a submissão
+                // Exemplo:
+                // if (!lixeiraSelect.value) {
+                //     event.preventDefault();
+                //     alert('Por favor, selecione uma lixeira.');
+                // }
+            });
+        });
+    </script>
+  
+    <!-- Script para Atualização Automática após Sucesso -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Seleciona todas as mensagens de flash com a classe 'alert-success'
+            const successMessages = document.querySelectorAll('.alert-success');
+            
+            if (successMessages.length > 0) {
+                console.log("Mensagem de sucesso detectada. Atualizando a página em breve...");
+                
+                // Define o tempo de atraso antes da atualização (em milissegundos)
+                const refreshDelay = 1000; // 1 segundo
+                
+                // Adiciona uma transição de opacidade para desvanecer a mensagem
+                successMessages.forEach(function(message) {
+                    message.style.transition = "opacity 0.5s ease-in-out";
+                    setTimeout(function() {
+                        message.style.opacity = "0";
+                    }, refreshDelay - 500); // Inicia a transição 0.5 segundos após a exibição
+                });
+
+                // Atualiza a página após o intervalo definido
+                setTimeout(function() {
+                    console.log("Atualizando a página agora.");
+                    window.location.reload();
+                }, refreshDelay);
+            } else {
+                console.log("Nenhuma mensagem de sucesso detectada. Nenhuma atualização necessária.");
+            }
+        });
+    </script>
+  
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Coletas</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
+          integrity="sha512-Fo3rlrZj/kTc+2kWzZdT3wDlBz7gZ9X7jPvXbkzB71F3Yp4CSpV9YmFv3QJb9dxLElBPCm59VbMB5s1Cl3Z6bA==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .card-header {
+            background-color: #6f42c1; /* Roxo */
+            color: #ffffff;
+        }
+        .card {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        .table {
+            background-color: #2c2c2c;
+            color: #ffffff;
+        }
+        .table th, .table td {
+            border-color: #6f42c1;
+        }
+        .btn-secondary {
+            background-color: #343a40; /* Cinza Escuro */
+            border-color: #343a40;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Minhas Coletas Recentes</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-3">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% if coletas %}
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo de Lixo</th>
+                        <th>Localização</th>
+                        <th>Data da Coleta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for coleta in coletas %}
+                        <tr>
+                            <td>{{ coleta.id }}</td>
+                            <td>{{ coleta.lixeiras.tipos_lixo.tipo }}</td>
+                            <td>{{ coleta.lixeiras.localizacao }}</td>
+                            <td>{{ coleta.data_coleta }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="mt-3">Nenhuma coleta registrada.</p>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
+    </div>
+</body>
+</html>
+

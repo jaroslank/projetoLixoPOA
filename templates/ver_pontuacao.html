@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pontuação</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
+          integrity="sha512-Fo3rlrZj/kTc+2kWzZdT3wDlBz7gZ9X7jPvXbkzB71F3Yp4CSpV9YmFv3QJb9dxLElBPCm59VbMB5s1Cl3Z6bA==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .card-header {
+            background-color: #6f42c1; /* Roxo */
+            color: #ffffff;
+        }
+        .card {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        .table {
+            background-color: #2c2c2c;
+            color: #ffffff;
+        }
+        .table th, .table td {
+            border-color: #6f42c1;
+        }
+        .btn-secondary {
+            background-color: #343a40; /* Cinza Escuro */
+            border-color: #343a40;
+        }
+   /* Estilos para os Triângulos Giratórios */
+.triangle {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 60px solid rgba(255, 0, 255, 0.7); /* Cor vibrante */
+    animation: rotateTriangle linear infinite;
+    opacity: 0.8;
+}
+
+/* Animação para rotação rápida */
+@keyframes rotateTriangle {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Minhas Pontuações</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-3">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% if pontuacoes %}
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Pontos</th>
+                        <th>Data da Pontuação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pontuacoes %}
+                        <tr>
+                            <td>{{ p.id }}</td>
+                            <td>{{ p.pontos }}</td>
+                            <td>{{ p.data_pontuacao }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="mt-3">Nenhuma pontuação registrada.</p>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
+    </div>
+   <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</body>
+</html>
+

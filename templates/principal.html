@@ -1,0 +1,950 @@
+<!-- templates/principal.html -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>DescarteCerto</title>
+    <!-- Meta Tags para Responsividade -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
+          integrity="sha512-Fo3rlrZj/kTc+2kWzZdT3wDlBz7gZ9X7jPvXbkzB71F3Yp4CSpV9YmFv3QJb9dxLElBPCm59VbMB5s1Cl3Z6bA==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chart.js para Gráficos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <!-- Custom CSS -->
+    <style>
+        /* Font Family */
+        body, html {
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #3a3a3a); /* Fundo escuro com gradiente */
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background-color: #343a40; /* Cor mais escura para contraste */
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #00C9FF;
+        }
+
+        /* Container Principal */
+        .main-container {
+            text-align: center;
+            padding: 40px 30px;
+            background-color: rgba(255, 255, 255, 0.05); /* Fundo semi-transparente */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 2s ease-in-out;
+            max-width: 1400px;
+            width: 90%;
+            margin: 60px auto;
+        }
+
+        /* Títulos */
+        .main-container h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: slideInDown 1s ease-out;
+            color: #00C9FF;
+            text-shadow: 0 0 15px rgba(0, 201, 255, 0.7);
+        }
+
+        .main-container h3, .main-container h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Parágrafos */
+        .main-container p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+
+        /* Seção de Cores de Coleta Seletiva */
+        .colors-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .colors-section h3 {
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .color-card {
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s, box-shadow 0.4s;
+            color: #000000; /* Texto preto para melhor legibilidade */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px); /* Efeito de desfoque */
+            min-height: 160px;
+        }
+        .color-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+        }
+        .color-icon {
+            font-size: 3em;
+            margin-right: 25px;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        .color-info h5 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #000000; /* Texto preto */
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+        .color-info p {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #333333; /* Texto mais escuro */
+        }
+
+        /* Ajuste específico para a seção "Cinza" */
+        .color-card.cinza .color-info p {
+            color: #f8f9fa; /* Cor de texto mais clara para melhor contraste */
+        }
+        .color-card.cinza .color-info h5 {
+            color: #f8f9fa; /* Título mais claro */
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.7); /* Ajustar a sombra do texto */
+        }
+
+        /* Gradientes para Cada Cor */
+        .color-card.verde {
+            background: linear-gradient(135deg, #92FE9D, #00C9FF); /* Verde Neon */
+        }
+        .color-card.vermelho {
+            background: linear-gradient(135deg, #FF416C, #FF4B2B); /* Vermelho */
+        }
+        .color-card.azul {
+            background: linear-gradient(135deg, #1E3C72, #2A5298); /* Azul */
+        }
+        .color-card.cinza {
+            background: linear-gradient(135deg, #434343, #000000); /* Cinza */
+        }
+
+        /* Seção de Gráficos e Estatísticas (Opcional) */
+        .chart-section {
+            margin-top: 60px;
+            text-align: center;
+        }
+        .chart-section h3 {
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 500px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Botões de Navegação */
+        .navigation-buttons {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .navigation-buttons .btn {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .navigation-buttons .btn i {
+            margin-right: 8px;
+        }
+        .navigation-buttons .btn-login {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .navigation-buttons .btn-login:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .navigation-buttons .btn-cadastrar {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+        .navigation-buttons .btn-cadastrar:hover {
+            background-color: #138496;
+            transform: scale(1.05);
+        }
+        .navigation-buttons .btn-dashboard {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .navigation-buttons .btn-dashboard:hover {
+            background-color: #e0a800;
+            transform: scale(1.05);
+        }
+        .navigation-buttons .btn-iniciar {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .navigation-buttons .btn-iniciar:hover {
+            background-color: #0069d9;
+            transform: scale(1.05);
+        }
+
+        /* Lista de Postos de Coleta */
+        .list-group-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #00C9FF;
+            color: #ffffff;
+            transition: background-color 0.3s;
+        }
+        .list-group-item:hover {
+            background-color: rgba(0, 201, 255, 0.2);
+        }
+
+        /* Ícones na Lista */
+        .list-group-item .fa {
+            margin-right: 10px;
+            color: #00C9FF;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .main-container h1 {
+                font-size: 2.5em;
+            }
+            .color-card {
+                flex-direction: column;
+                text-align: center;
+                min-height: auto;
+            }
+            .color-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            .chart-container {
+                height: 400px;
+            }
+        }
+        @media (max-width: 576px) {
+            .navigation-buttons .btn {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .color-card {
+                padding: 15px;
+            }
+            .color-info h5 {
+                font-size: 1.2em;
+            }
+            .color-info p {
+                font-size: 0.95em;
+            }
+            .chart-container {
+                height: 300px;
+            }
+            .slider-container input[type=range] {
+                width: 100%;
+            }
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Marquee */
+       .marquee {
+    position: fixed; /* Fixa na parte inferior da tela */
+    bottom: 0; /* Alinha à parte inferior */
+    left: 0; /* Começa no canto esquerdo */
+    width: 100%; /* Ocupa toda a largura */
+    height: auto; /* Ajusta dinamicamente a altura */
+    padding: 10px 0; /* Espaçamento interno */
+    background-color: rgba(0, 0, 0, 0.8); /* Fundo semi-opaco */
+    color: #ffffff; /* Texto branco */
+    z-index: 9999; /* Garante que fique acima de outros elementos */
+    overflow: hidden; /* Esconde conteúdo que ultrapassar */
+    white-space: nowrap; /* Não quebra linhas */
+    box-sizing: border-box; /* Inclui padding e border na largura */
+    text-align: center; /* Centraliza o conteúdo */
+}
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Rodapé */
+        .footer-text {
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: #d3d3d3;
+            text-align: center;
+            width: 100%;
+        } 
+        /* Esferas Animadas */
+	.bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 201, 255, 0.7);
+            animation: rise 10s infinite ease-in-out;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes rise {
+            0% {
+            transform: translateY(100vh);
+            opacity: 0.5;
+        }
+            50% {
+            opacity: 0.8;
+        }
+            100% {
+            transform: translateY(-200vh);
+            opacity: 0;
+        }
+    }
+    
+        /* Tamanhos Variáveis */
+           .bubble.small {
+            width: 40px;
+            height: 40px;
+            animation-duration: 7s;
+          }  
+            .bubble.medium {
+             width: 80px;
+             height: 80px;
+             animation-duration: 10s;
+          }
+             .bubble.large {
+              width: 120px;
+              height: 120px;
+              animation-duration: 15s;
+    }
+    /* Estilos básicos para as esferas animadas */
+.bubble {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(0, 201, 255, 0.7);
+    opacity: 0;
+    animation: bubbleAnimation linear infinite;
+}
+
+/* Tamanhos de esferas */
+.bubble.small {
+    width: 30px;
+    height: 30px;
+}
+
+.bubble.medium {
+    width: 50px;
+    height: 50px;
+}
+
+.bubble.large {
+    width: 70px;
+    height: 70px;
+}
+
+/* Animação de movimento das esferas */
+@keyframes bubbleAnimation {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+    }
+}
+/* Estilo para as Estrelas Brilhantes e Giratórias */
+.star {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8); /* Cor branca brilhante */
+    animation: rotateStar linear infinite, glow 1.5s alternate infinite;
+    opacity: 0.8;
+}
+
+@keyframes rotateStar {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.8);
+        opacity: 0.8;
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1);
+        opacity: 1;
+    }
+}
+
+/* Tamanhos de estrelas */
+.star.small {
+    width: 15px;
+    height: 15px;
+}
+
+.star.medium {
+    width: 25px;
+    height: 25px;
+}
+
+.star.large {
+    width: 40px;
+    height: 40px;
+}
+.centralizado {
+    display: flex;
+    justify-content: center;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Ajusta a largura */
+}
+
+    </style>
+    <!-- Política de Segurança de Conteúdo (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://code.jquery.com https://cdn.jsdelivr.net;
+        style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://unpkg.com https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https://via.placeholder.com https://qsrgmjucivjqtwuoyjfr.supabase.co;
+        connect-src 'self' https://qsrgmjucivjqtwuoyjfr.supabase.co;
+    ">
+    <!-- Link para o Manifesto -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- Meta Tags para iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/static/icons/icon-192x192.png">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="{{ url_for('principal') }}">Coleta de Lixo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Usar o ícone padrão do Bootstrap para garantir a funcionalidade -->
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <!-- Botão "Home" -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('principal') }}">Home</a>
+                </li>
+
+                {% if 'user_id' in session %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('registrar_coleta') }}">Registrar Coleta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ver_pontuacao') }}">Ver Pontuação</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('minhas_coletas') }}">Minhas Coletas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('cadastrar') }}">Cadastro</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Botão de Instalação Personalizado -->
+    <div class="container text-center mt-4">
+        <button id="installButton" style="display: none;" class="btn btn-primary">
+            <i class="fas fa-download"></i> Adicionar à Tela Inicial
+        </button>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-4">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+
+    <div class="main-container">
+        <h1>Bem-vindo ao DescarteCerto</h1>
+        <p>
+            Junte-se a nós na missão de cuidar do nosso planeta. Registre suas coletas de lixo, acompanhe sua pontuação e ajude a alcançar metas que fazem a diferença para um mundo mais limpo e sustentável.
+        </p>
+        
+        <!-- Seção de Botões de Navegação -->
+        <div class="navigation-buttons">
+            <a href="{{ url_for('login') }}" class="btn btn-login">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="{{ url_for('cadastrar') }}" class="btn btn-cadastrar">
+                <i class="fas fa-user-plus"></i> Cadastrar
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-dashboard">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{{ url_for('principal') }}" class="btn btn-iniciar">
+                <i class="fas fa-home"></i> Iniciar
+            </a>
+        </div>
+
+        <!-- Seção de Cores de Coleta Seletiva -->
+        <div class="colors-section">
+            <h3>Entenda as Cores da Coleta Seletiva</h3>
+            <div class="row mt-4">
+                <!-- Verde -->
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="color-card verde">
+                        <i class="fas fa-recycle color-icon"></i>
+                        <div class="color-info">
+                            <h5>Verde</h5>
+                            <p><strong>Materiais Recicláveis:</strong> Plásticos, metais, vidros e papel.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Vermelho -->
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="color-card vermelho">
+                        <i class="fas fa-biohazard color-icon"></i>
+                        <div class="color-info">
+                            <h5>Vermelho</h5>
+                            <p><strong>Resíduos Perigosos:</strong> Baterias, eletrônicos, produtos químicos.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Azul -->
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="color-card azul">
+                        <i class="fas fa-water color-icon"></i>
+                        <div class="color-info">
+                            <h5>Azul</h5>
+                            <p><strong>Reciclagem de Água:</strong> Resíduos orgânicos para compostagem.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cinza -->
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="color-card cinza">
+                        <i class="fas fa-trash-alt color-icon"></i>
+                        <div class="color-info">
+                            <h5>Cinza</h5>
+                            <p><strong>Resíduos Não Recicláveis:</strong> Restos de alimentos, materiais contaminados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Estatísticas de Coleta com Gráficos (Opcional) -->
+        <div class="chart-section mt-5">
+            <h3>Estatísticas de Coleta</h3>
+
+            <!-- Slider para Filtrar Por Ano (Opcional) -->
+            <div class="slider-container">
+                <label for="yearRange"><strong>Filtrar por Ano:</strong></label>
+                <input type="range" class="custom-range" id="yearRange" min="2020" max="2024" step="1" value="2024">
+                
+            </div>
+
+<div class="row centralizado">
+    <!-- Gráfico 1 -->
+    <div class="col-lg-6 col-md-12 mb-4">
+        <div class="chart-container">
+            <canvas id="coletaChart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+
+        <!-- Lista de Postos de Coleta de Porto Alegre -->
+        <div class="container mt-5">
+            <h3>Locais de Coleta em Porto Alegre</h3>
+            <p>A Secretaria Municipal de Serviços Urbanos, por meio do Departamento Municipal de Limpeza Urbana (DMLU), divulga os locais de coleta de lixo reciclável em Porto Alegre (abaixo). Nesses locais, os porto-alegrenses podem descartar resíduos que não são recolhidos pelas coletas regulares - domiciliar e seletiva. As unidades recebem madeira, móveis velhos, colchões, terra, entulho, caliça, cerâmica, sucata de ferro, eletrodomésticos, resíduos arbóreos e diversos materiais que muitas vezes acabam sendo descartados irregularmente em locais públicos.</p>
+            
+            <ul class="list-group">
+                <!-- Lista de Lixeiras -->
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>01 - Unidade de Serviço Princesa Isabel</strong> (Av. Ipiranga, 2765)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>02 - Unidade de Serviço Câncio Gomes</strong> (Travessa Carmem, 111)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>03 - Unidade de Serviço Bernardino</strong> (Avenida Bernardino Silveira Amorim, 2261)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>04 - Unidade de Serviço Cavalhada</strong> (Avenida Otto Niemayer, 3.206)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h às 23h, e sábado, das 7h às 18h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>05 - Unidade de Serviço Conceição</strong> (Avenida Alberto Bins, sob a elevada da Conceição)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h às 23h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>06 - Unidade de Serviço Cruzeiro</strong> (Avenida Cruzeiro do Sul, 1445)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>07 - Unidade de Serviço Diário</strong> (Avenida Diário de Notícias, 1111)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>08 - Unidade de Serviço Fátima/Pinto</strong> (Rua Alfredo Ferreira Rodrigues, 975)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>09 - Unidade de Serviço Freitas de Castro</strong> (Rua Prof. Freitas de Castro, 265)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>10 - Unidade de Serviço Glória</strong> (Avenida Prof. Carvalho de Freitas, 1.012)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 18h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>11 - Unidade de Serviço Humaitá</strong> (Rua José Aloísio Filho, 780)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>12 - Unidade de Serviço IAPI</strong> (Avenida Assis Brasil, 1.715)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h30 às 18h, e sábado, das 7h30 às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>13 - Unidade de Serviço Niterói</strong> (Avenida Niterói, 19)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h às 23h, e sábado, das 8h às 18h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>14 - Unidade de Serviço República</strong> (Rua da República, 711)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>15 - Unidade de Serviço Restinga</strong> (Rua Rubem Pereira Torelly, 50)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h30 às 23h, e sábado, das 8h às 18h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>16 - Unidade de Serviço Silva Só</strong> (Rua Silva Só, sob o Viaduto Tiradentes)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h30 às 23h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>17 - Unidade de Serviço Tenente Alpoin</strong> (Rua José Luiz Rodrigues Sobral, 958)<br>
+                    <em>Horário:</em> Segunda a sexta, das 8h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>18 - Unidade de Serviço Visconde do Herval</strong> (Rua Visconde do Herval, 945)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h às 17h, e sábado, das 8h às 12h
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i> <strong>19 - Unidade de Serviço Zeferino Dias</strong> (Rua Dom Jaime de Barros Câmara, 815)<br>
+                    <em>Horário:</em> Segunda a sexta, das 7h30 às 18h, e sábado, das 7h30 às 12h
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Mensagens de Impacto no Rodapé -->
+    <div class="marquee">
+        <span>🌍 "Cada pequena ação conta para um planeta mais verde!" 🌿 | ♻️ "Recicle hoje para um amanhã melhor!" 🌱 | 🌞 "Cuidar do meio ambiente é cuidar de nós mesmos!" 💚 | 🚮 "Mantenha a limpeza, preserve a natureza!" 🌼</span>
+    </div>
+
+    <div class="footer-text">
+        &copy; {{ current_year }} Coleta de Lixo. Todos os direitos reservados.
+    </div>
+
+    <!-- Bootstrap JS e Dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+            integrity="sha512-Fo3rlrZj/kTc+2kWzZdT3wDlBz7gZ9X7jPvXbkzB71F3Yp4CSpV9YmFv3QJb9dxLElBPCm59VbMB5s1Cl3Z6bA==" 
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha512-Fo3rlrZj/kTc+2kWzZdT3wDlBz7gZ9X7jPvXbkzB71F3Yp4CSpV9YmFv3QJb9dxLElBPCm59VbMB5s1Cl3Z6bA==" 
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Script para Gráficos (Opcional) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Dados passados pelo backend
+            const meses = {{ meses | tojson | safe }};
+            const coletas = {{ coletas_counts | tojson | safe }};
+            const topRegioes = {{ top_regioes | tojson | safe }};
+
+            console.log("Meses:", meses);
+            console.log("Coletas Counts:", coletas);
+            console.log("Top Regiões:", topRegioes);
+
+            // Atualizar o ano selecionado no slider (Opcional)
+            const yearRange = document.getElementById('yearRange');
+            const selectedYear = document.getElementById('selectedYear');
+
+            yearRange.addEventListener('input', function() {
+                selectedYear.textContent = yearRange.value;
+                // Aqui você pode implementar a lógica para filtrar os dados com base no ano selecionado
+                // Por exemplo, fazer uma chamada AJAX para buscar dados filtrados
+            });
+
+            // Gráfico de Barras para Coletas por Mês (Opcional)
+            if (meses.length > 0 && coletas.length > 0) {
+                const ctx = document.getElementById('coletaChart').getContext('2d');
+                const coletaChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: meses,
+                        datasets: [{
+                            label: 'Número de Coletas',
+                            data: coletas,
+                            backgroundColor: '#00C9FF',
+                            borderColor: '#92FE9D',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#ffffff'
+                                },
+                                grid: {
+                                    color: 'rgba(255,255,255,0.2)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#ffffff'
+                                },
+                                grid: {
+                                    color: 'rgba(255,255,255,0.2)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#ffffff'
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.warn('Nenhum dado disponível para o gráfico de coletas.');
+                // Exibir uma mensagem na página indicando que não há dados
+                const coletaChartContainer = document.querySelector('#coletaChart').parentElement;
+                coletaChartContainer.innerHTML = '<p>Nenhum dado disponível para exibir no gráfico.</p>';
+            }
+
+            // Gráfico de Pizza para Top Regiões (Opcional)
+            if (topRegioes && topRegioes.length > 0) {
+                const ctxTopRegioes = document.getElementById('topRegioesChart').getContext('2d');
+                const topRegioesChart = new Chart(ctxTopRegioes, {
+                    type: 'pie',
+                    data: {
+                        labels: topRegioes.map(r => r.regiao),
+                        datasets: [{
+                            data: topRegioes.map(r => r.coletas),
+                            backgroundColor: [
+                                '#FF6384',
+                                '#36A2EB',
+                                '#FFCE56',
+                                '#4BC0C0',
+                                '#9966FF'
+                            ],
+                            borderColor: [
+                                '#ffffff',
+                                '#ffffff',
+                                '#ffffff',
+                                '#ffffff',
+                                '#ffffff'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#ffffff'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const ctxTopRegioes2 = document.getElementById('topRegioesChart2').getContext('2d');
+                const topRegioesChart2 = new Chart(ctxTopRegioes2, {
+                    type: 'pie',
+                    data: {
+                        labels: topRegioes.map(r => r.regiao),
+                        datasets: [{
+                            data: topRegioes.map(r => r.coletas),
+                            backgroundColor: [
+                                '#FF6384',
+                                '#36A2EB',
+                                '#FFCE56',
+                                '#4BC0C0',
+                                '#9966FF'
+                            ],
+                            borderColor: [
+                                '#ffffff',
+                                '#ffffff',
+                                '#ffffff',
+                                '#ffffff',
+                                '#ffffff'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#ffffff'
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.warn('Nenhum dado disponível para o gráfico de top regiões.');
+                const topRegioesChartContainer = document.querySelector('#topRegioesChart').parentElement;
+                topRegioesChartContainer.innerHTML = '<p>Nenhum dado disponível para exibir no gráfico de top regiões.</p>';
+                
+                const topRegioesChartContainer2 = document.querySelector('#topRegioesChart2').parentElement;
+                topRegioesChartContainer2.innerHTML = '<p>Nenhum dado disponível para exibir no gráfico de top regiões.</p>';
+            }
+        });
+    </script>
+
+    <!-- Registro do Service Worker e Botão de Instalação -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                    console.log('ServiceWorker registrado com sucesso:', registration.scope);
+                }, function(err) {
+                    console.log('Falha ao registrar o ServiceWorker:', err);
+                });
+            });
+        }
+
+        // Capturando o evento beforeinstallprompt para desktop e mobile
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Previna o mini-infobar do Chrome a aparecer
+            e.preventDefault();
+            // Armazene o evento para disparar mais tarde
+            deferredPrompt = e;
+            // Mostre o botão de instalação
+            const installButton = document.getElementById('installButton');
+            if (installButton) {
+                installButton.style.display = 'block';
+                installButton.addEventListener('click', () => {
+                    // Mostre o prompt de instalação
+                    deferredPrompt.prompt();
+                    // Aguarde a resposta do usuário
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('Usuário aceitou a instalação');
+                        } else {
+                            console.log('Usuário recusou a instalação');
+                        }
+                        deferredPrompt = null;
+                    });
+                });
+            }
+        });
+
+        // Opcional: Remova o botão após a instalação
+        window.addEventListener('appinstalled', (evt) => {
+            const installButton = document.getElementById('installButton');
+            if (installButton) {
+                installButton.style.display = 'none';
+            }
+            console.log('PWA foi instalado');
+        });
+    </script>
+   <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</body>
+</html>
+

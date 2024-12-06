@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login de Usuário</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
+          integrity="sha512-Fo3rlrZj/kTc+2kWzZdT3wDlBz7gZ9X7jPvXbkzB71F3Yp4CSpV9YmFv3QJb9dxLElBPCm59VbMB5s1Cl3Z6bA==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .btn-primary {
+            background-color: #6f42c1; /* Roxo */
+            border-color: #6f42c1;
+        }
+        .btn-secondary {
+            background-color: #343a40; /* Cinza Escuro */
+            border-color: #343a40;
+        }
+        .form-control {
+            background-color: #2c2c2c;
+            color: #ffffff;
+            border: 1px solid #6f42c1;
+        }
+        .form-control:focus {
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border-color: #28a745; /* Verde */
+            box-shadow: none;
+        }
+        .alert-success {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+        .alert-danger {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+        .alert-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        /* Font Family */
+        body, html {
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #3a3a3a); /* Fundo escuro com gradiente */
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background-color: #343a40; /* Cor mais escura para contraste */
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #00C9FF;
+        }
+
+        /* Container Principal */
+        .main-container {
+            text-align: center;
+            padding: 40px 30px;
+            background-color: rgba(255, 255, 255, 0.05); /* Fundo semi-transparente */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 2s ease-in-out;
+            max-width: 1400px;
+            width: 90%;
+            margin: 60px auto;
+        }
+
+        /* Títulos */
+        .main-container h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: slideInDown 1s ease-out;
+            color: #00C9FF;
+            text-shadow: 0 0 15px rgba(0, 201, 255, 0.7);
+        }
+
+        .main-container h3, .main-container h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Parágrafos */
+        .main-container p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+
+        /* Seção de Cores de Coleta Seletiva */
+        .colors-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .colors-section h3 {
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .color-card {
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s, box-shadow 0.4s;
+            color: #000000; /* Texto preto para melhor legibilidade */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px); /* Efeito de desfoque */
+            min-height: 160px;
+        }
+        .color-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+        }
+        .color-icon {
+            font-size: 3em;
+            margin-right: 25px;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        .color-info h5 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #000000; /* Texto preto */
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+        .color-info p {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #333333; /* Texto mais escuro */
+        }
+
+        /* Ajuste específico para a seção "Cinza" */
+        .color-card.cinza .color-info p {
+            color: #f8f9fa; /* Cor de texto mais clara para melhor contraste */
+        }
+        .color-card.cinza .color-info h5 {
+            color: #f8f9fa; /* Título mais claro */
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.7); /* Ajustar a sombra do texto */
+        }
+
+        /* Gradientes para Cada Cor */
+        .color-card.verde {
+            background: linear-gradient(135deg, #92FE9D, #00C9FF); /* Verde Neon */
+        }
+        .color-card.vermelho {
+            background: linear-gradient(135deg, #FF416C, #FF4B2B); /* Vermelho */
+        }
+        .color-card.azul {
+            background: linear-gradient(135deg, #1E3C72, #2A5298); /* Azul */
+        }
+        .color-card.cinza {
+            background: linear-gradient(135deg, #434343, #000000); /* Cinza */
+        }
+
+        /* Seção de Gráficos e Estatísticas (Opcional) */
+        .chart-section {
+            margin-top: 60px;
+            text-align: center;
+        }
+        .chart-section h3 {
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 500px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Botões de Navegação */
+        .navigation-buttons {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .navigation-buttons .btn {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .navigation-buttons .btn i {
+            margin-right: 8px;
+        }
+        .navigation-buttons .btn-login {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .navigation-buttons .btn-login:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .navigation-buttons .btn-cadastrar {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+        .navigation-buttons .btn-cadastrar:hover {
+            background-color: #138496;
+            transform: scale(1.05);
+        }
+        .navigation-buttons .btn-dashboard {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .navigation-buttons .btn-dashboard:hover {
+            background-color: #e0a800;
+            transform: scale(1.05);
+        }
+        .navigation-buttons .btn-iniciar {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .navigation-buttons .btn-iniciar:hover {
+            background-color: #0069d9;
+            transform: scale(1.05);
+        }
+
+        /* Lista de Postos de Coleta */
+        .list-group-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #00C9FF;
+            color: #ffffff;
+            transition: background-color 0.3s;
+        }
+        .list-group-item:hover {
+            background-color: rgba(0, 201, 255, 0.2);
+        }
+
+        /* Ícones na Lista */
+        .list-group-item .fa {
+            margin-right: 10px;
+            color: #00C9FF;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .main-container h1 {
+                font-size: 2.5em;
+            }
+            .color-card {
+                flex-direction: column;
+                text-align: center;
+                min-height: auto;
+            }
+            .color-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            .chart-container {
+                height: 400px;
+            }
+        }
+        @media (max-width: 576px) {
+            .navigation-buttons .btn {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .color-card {
+                padding: 15px;
+            }
+            .color-info h5 {
+                font-size: 1.2em;
+            }
+            .color-info p {
+                font-size: 0.95em;
+            }
+            .chart-container {
+                height: 300px;
+            }
+            .slider-container input[type=range] {
+                width: 100%;
+            }
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Marquee */
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            position: fixed;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            padding: 10px 0;
+            z-index: 1000;
+            font-size: 1em;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Rodapé */
+        .footer-text {
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: #d3d3d3;
+            text-align: center;
+            width: 100%;
+        } 
+        /* Esferas Animadas */
+	.bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 201, 255, 0.7);
+            animation: rise 10s infinite ease-in-out;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes rise {
+            0% {
+            transform: translateY(100vh);
+            opacity: 0.5;
+        }
+            50% {
+            opacity: 0.8;
+        }
+            100% {
+            transform: translateY(-200vh);
+            opacity: 0;
+        }
+    }
+    
+        /* Tamanhos Variáveis */
+           .bubble.small {
+            width: 40px;
+            height: 40px;
+            animation-duration: 7s;
+          }  
+            .bubble.medium {
+             width: 80px;
+             height: 80px;
+             animation-duration: 10s;
+          }
+             .bubble.large {
+              width: 120px;
+              height: 120px;
+              animation-duration: 15s;
+    }
+    /* Estilos básicos para as esferas animadas */
+.bubble {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(0, 201, 255, 0.7);
+    opacity: 0;
+    animation: bubbleAnimation linear infinite;
+}
+
+/* Tamanhos de esferas */
+.bubble.small {
+    width: 30px;
+    height: 30px;
+}
+
+.bubble.medium {
+    width: 50px;
+    height: 50px;
+}
+
+.bubble.large {
+    width: 70px;
+    height: 70px;
+}
+
+/* Animação de movimento das esferas */
+@keyframes bubbleAnimation {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+    }
+}
+/* Estilo para as Estrelas Brilhantes e Giratórias */
+.star {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8); /* Cor branca brilhante */
+    animation: rotateStar linear infinite, glow 1.5s alternate infinite;
+    opacity: 0.8;
+}
+
+@keyframes rotateStar {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.8);
+        opacity: 0.8;
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1);
+        opacity: 1;
+    }
+}
+
+/* Tamanhos de estrelas */
+.star.small {
+    width: 15px;
+    height: 15px;
+}
+
+.star.medium {
+    width: 25px;
+    height: 25px;
+}
+
+.star.large {
+    width: 40px;
+    height: 40px;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Login de Usuário</h2>
+        <form action="{{ url_for('login') }}" method="post">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" class="form-control" id="senha" name="senha" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-3">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <hr>
+        <a href="{{ url_for('cadastrar') }}" class="btn btn-secondary">Cadastrar</a>
+    </div>
+   <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</body>
+</html>
+
